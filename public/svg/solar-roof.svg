@@ -1,0 +1,40 @@
+<svg viewBox="0 0 400 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ECFDF5" />
+      <stop offset="100%" stop-color="#F1F5F9" />
+    </linearGradient>
+    <linearGradient id="panelGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0F172A" />
+      <stop offset="100%" stop-color="#1E293B" />
+    </linearGradient>
+    <linearGradient id="sunGlow" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#F59E0B" />
+      <stop offset="100%" stop-color="#10B981" />
+    </linearGradient>
+  </defs>
+
+  <!-- Sky Background -->
+  <rect width="400" height="220" rx="16" fill="url(#skyGrad)" />
+  
+  <!-- Sun Glow -->
+  <circle cx="330" cy="50" r="32" fill="url(#sunGlow)" opacity="0.85" />
+  <circle cx="330" cy="50" r="45" stroke="#FBBF24" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.5" />
+
+  <!-- Roof Structure -->
+  <polygon points="60,140 200,60 340,140" fill="#334155" />
+  <polygon points="75,140 200,68 325,140" fill="#475569" />
+
+  <!-- Solar Panel Array Grid -->
+  <g fill="url(#panelGrad)" stroke="#10B981" stroke-width="1.5" opacity="0.95">
+    <polygon points="110,130 180,95 210,95 140,130" />
+    <polygon points="145,130 215,95 245,95 175,130" />
+    <polygon points="180,130 250,95 280,95 210,130" />
+  </g>
+
+  <!-- House Base -->
+  <rect x="90" y="140" width="220" height="60" fill="#E2E8F0" rx="2" />
+  <rect x="180" y="160" width="40" height="40" fill="#0F172A" rx="4" />
+  <rect x="120" y="155" width="30" height="25" fill="#38BDF8" rx="2" opacity="0.8" />
+  <rect x="250" y="155" width="30" height="25" fill="#38BDF8" rx="2" opacity="0.8" />
+</svg>
