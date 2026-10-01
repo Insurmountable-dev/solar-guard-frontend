@@ -1,81 +1,227 @@
-import React, { useState } from "react";
+import React, {
+    useEffect,
+    useState
+} from "react";
+
+import {
+    useAuth
+} from "./contexts/AuthContext";
 
 import LoginPage from "./components/auth/LoginPage";
 import RegisterPage from "./components/auth/RegisterPage";
 
+import DashboardPage from "./components/dashboard/DashboardPage";
+import HouseholdPage from "./components/household/HouseholdPage";
+import AppliancePage from "./components/appliance/AppliancePage";
+import AssessmentPage from "./components/assessment/AssessmentPage";
+
+
 export default function App() {
-    const [currentView, setCurrentView] = useState("login");
-    const [currentUser, setCurrentUser] = useState(null);
 
-    const handleLoginSuccess = (userData) => {
-        setCurrentUser(userData);
-        setCurrentView("dashboard");
-    };
+    const {
+        isAuthenticated,
+        login
+    } = useAuth();
 
-    const handleRegisterSuccess = (userData) => {
-        setCurrentUser(userData);
-        setCurrentView("dashboard");
-    };
 
-    if (currentView === "register") {
+    const [
+        currentView,
+        setCurrentView
+    ] = useState(() => {
+
         return (
-            <RegisterPage
-                onSuccess={handleRegisterSuccess}
-                onLogin={() => setCurrentView("login")}
+            sessionStorage.getItem(
+                "solarGuardView"
+            ) || "dashboard"
+        );
+
+    });
+
+
+    const [
+        currentAssessment,
+        setCurrentAssessment
+    ] = useState(null);
+
+
+    useEffect(() => {
+
+        sessionStorage.setItem(
+            "solarGuardView",
+            currentView
+        );
+
+    }, [currentView]);
+
+
+    const navigate = (
+        view
+    ) => {
+
+        setCurrentView(view);
+
+    };
+
+
+    const handleLoginSuccess = (
+        authData
+    ) => {
+
+        console.log(
+            "LOGIN SUCCESS:",
+            authData
+        );
+
+
+        login(
+            authData
+        );
+
+
+        setCurrentView(
+            "dashboard"
+        );
+
+    };
+
+
+    const handleRegisterSuccess = (
+        authData
+    ) => {
+
+        login(
+            authData
+        );
+
+
+        setCurrentView(
+            "dashboard"
+        );
+
+    };
+
+
+    const handleAssessmentCreated = (
+        assessment
+    ) => {
+
+        setCurrentAssessment(
+            assessment
+        );
+
+
+        setCurrentView(
+            "assessments"
+        );
+
+    };
+
+
+    if (!isAuthenticated) {
+
+        if (
+            currentView === "register"
+        ) {
+
+            return (
+                <RegisterPage
+                    onSuccess={
+                        handleRegisterSuccess
+                    }
+                    onLogin={() =>
+                        setCurrentView(
+                            "login"
+                        )
+                    }
+                />
+            );
+
+        }
+
+
+        return (
+            <LoginPage
+                onSuccess={
+                    handleLoginSuccess
+                }
+                onRegister={() =>
+                    setCurrentView(
+                        "register"
+                    )
+                }
+                onForgotPassword={() => {
+                    console.log(
+                        "Forgot password clicked"
+                    );
+                }}
             />
         );
+
     }
 
-    if (currentView === "dashboard") {
-        return (
-            <div className="min-h-screen bg-slate-50">
-                <header className="border-b border-slate-200 bg-white">
-                    <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-                        <div>
-                            <h1 className="text-xl font-bold text-slate-900">
-                                Solar Guard
-                            </h1>
 
-                            <p className="text-xs text-slate-500">
-                                System Sizing & Assessment
-                            </p>
-                        </div>
+    switch (currentView) {
 
-                        <button
-                            type="button"
-                            onClick={() => {
-                                setCurrentUser(null);
-                                setCurrentView("login");
-                            }}
-                            className="text-sm font-medium text-slate-500 hover:text-emerald-600"
-                        >
-                            Log out
-                        </button>
-                    </div>
-                </header>
+        case "dashboard":
 
-                <main className="mx-auto max-w-7xl px-6 py-10">
-                    <h2 className="text-2xl font-bold text-slate-900">
-                        Welcome to Solar Guard
-                    </h2>
+            return (
+                <DashboardPage
+                    onNavigate={
+                        navigate
+                    }
+                />
+            );
 
-                    <p className="mt-2 text-slate-500">
-                        {currentUser?.first_name
-                            ? `Welcome, ${currentUser.first_name}.`
-                            : "Your solar assessment dashboard will appear here."}
-                    </p>
-                </main>
-            </div>
-        );
+
+        case "households":
+
+            return (
+                <HouseholdPage
+                    onNavigate={
+                        navigate
+                    }
+                    onAssessmentCreated={
+                        handleAssessmentCreated
+                    }
+                />
+            );
+
+
+        case "appliances":
+
+            return (
+                <AppliancePage
+                    onNavigate={
+                        navigate
+                    }
+                />
+            );
+
+
+        case "assessments":
+
+            return (
+                <AssessmentPage
+                    onNavigate={
+                        navigate
+                    }
+                    initialAssessment={
+                        currentAssessment
+                    }
+                />
+            );
+
+
+        default:
+
+            return (
+                <DashboardPage
+                    onNavigate={
+                        navigate
+                    }
+                />
+            );
+
     }
 
-    return (
-        <LoginPage
-            onSuccess={handleLoginSuccess}
-            onRegister={() => setCurrentView("register")}
-            onForgotPassword={() => {
-                alert("Password reset flow coming soon.");
-            }}
-        />
-    );
 }
