@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { registerUser } from "../services/authServices";
+import { registerUser } from "../services/authService";
 import { validateRegisterForm } from "../utils/validation";
 
 const initialFormData = {
