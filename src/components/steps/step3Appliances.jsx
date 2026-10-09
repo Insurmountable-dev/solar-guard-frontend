@@ -1,230 +1,599 @@
-import React, { useState } from 'react';
+import React, {
+    useState
+} from "react";
 
-// Default 3 Basic Household Items
-export const DEFAULT_BASIC_APPLIANCES = [
-  { id: 'fridge', name: 'Refrigerator / Freezer', defaultQty: 1, defaultWatts: 150, defaultHours: 24, category: 'Kitchen' },
-  { id: 'tv', name: 'TV & Entertainment', defaultQty: 1, defaultWatts: 100, defaultHours: 6, category: 'Living' },
-  { id: 'lighting', name: 'LED Lights (4-6 bulbs)', defaultQty: 1, defaultWatts: 50, defaultHours: 5, category: 'Lighting' },
-];
+import {
+    ArrowLeft,
+    Plus,
+    Trash2
+} from "lucide-react";
 
-// Quick-add presets
-export const QUICK_ADD_PRESETS = [
-  { id: 'iron', name: 'Iron Box', defaultQty: 1, defaultWatts: 1000, defaultHours: 0.5 },
-  { id: 'microwave', name: 'Microwave', defaultQty: 1, defaultWatts: 1200, defaultHours: 0.25 },
-  { id: 'water_pump', name: 'Water Pump', defaultQty: 1, defaultWatts: 750, defaultHours: 1 },
-  { id: 'instant_shower', name: 'Instant Shower Heater', defaultQty: 1, defaultWatts: 3000, defaultHours: 0.5 },
-  { id: 'laptop', name: 'Laptop / WiFi Router', defaultQty: 1, defaultWatts: 60, defaultHours: 10 },
-  { id: 'washing_machine', name: 'Washing Machine', defaultQty: 1, defaultWatts: 500, defaultHours: 1 },
-];
+
+const createEmptyAppliance = () => ({
+    appliance_name: "",
+    appliance_category: "",
+    quantity: 1,
+    power_rating_watts: "",
+    hours_per_day: "",
+    days_per_week: 7,
+    is_essential: false
+});
+
 
 export default function Step3Appliances({
-  formData,
-  onChange,
-  onApplianceChange,
-  onAddAppliance,
-  onRemoveAppliance,
+    appliances,
+    onChange,
+    onNext,
+    onBack,
+    onSaveExit,
+    isSaving
 }) {
-  const [showPresets, setShowPresets] = useState(false);
-  const appliances = formData.appliances || DEFAULT_BASIC_APPLIANCES;
 
-  // Calculate total daily energy consumption (kWh/day)
-  const totalDailyKWh = appliances.reduce((sum, item) => {
-    return sum + (Number(item.defaultQty || 1) * Number(item.defaultWatts || 0) * Number(item.defaultHours || 0)) / 1000;
-  }, 0).toFixed(2);
+    const [
+        error,
+        setError
+    ] = useState("");
 
-  // Quick add preset handler
-  const handleAddPreset = (preset) => {
-    onAddAppliance({
-      ...preset,
-      id: `${preset.id}_${Date.now()}`,
-    });
-    setShowPresets(false);
-  };
 
-  // Custom blank item handler
-  const handleAddCustom = () => {
-    onAddAppliance({
-      id: `custom_${Date.now()}`,
-      name: 'Custom Appliance',
-      defaultQty: 1,
-      defaultWatts: 100,
-      defaultHours: 2,
-    });
-    setShowPresets(false);
-  };
+    const addAppliance = () => {
 
-  return (
-    <div className="space-y-6 w-full max-w-xl mx-auto">
-      {/* Header Banner */}
-      <div className="space-y-1">
-        <h2 className="text-base font-bold text-slate-800 tracking-tight">
-          Appliance Energy Profile
-        </h2>
-        <p className="text-xs text-slate-500 leading-relaxed">
-          We start with 3 basic household items. Adjust quantities or add items to calculate your daily energy target.
-        </p>
-      </div>
+        onChange([
+            ...appliances,
+            createEmptyAppliance()
+        ]);
 
-      {/* Live Energy Consumption Summary Badge */}
-      <div className="bg-emerald-50 border border-emerald-200/80 p-3.5 rounded-2xl flex items-center justify-between">
-        <div>
-          <p className="text-[10px] font-bold uppercase tracking-wider text-emerald-800">
-            Estimated Daily Consumption
-          </p>
-          <p className="text-lg font-black text-emerald-950 mt-0.5">
-            {totalDailyKWh} <span className="text-xs font-semibold">kWh / day</span>
-          </p>
-        </div>
-        <div className="text-right">
-          <p className="text-[10px] text-emerald-700 font-medium">Estimated Monthly Usage</p>
-          <p className="text-xs font-bold text-emerald-900 mt-0.5">
-            ~{Math.round(totalDailyKWh * 30)} kWh / month
-          </p>
-        </div>
-      </div>
+    };
 
-      {/* Monthly Bill Input (Optional fallback) */}
-      <div className="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-2xs space-y-3">
-        <label className="block text-xs font-semibold text-slate-700">
-          Average Monthly KPLC Bill (KES)
-        </label>
-        <div className="relative">
-          <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-xs text-slate-400 font-semibold pointer-events-none">
-            KES
-          </span>
-          <input
-            type="number"
-            name="monthly_bill_kes"
-            placeholder="e.g. 4500"
-            value={formData.monthly_bill_kes || ''}
-            onChange={onChange}
-            className="w-full pl-12 pr-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-hidden focus:border-emerald-500 focus:bg-white transition"
-          />
-        </div>
-      </div>
 
-      {/* Basic & Added Appliances List */}
-      <div className="space-y-3">
-        <div className="flex items-center justify-between">
-          <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wider">
-            Household Appliances ({appliances.length})
-          </h3>
-          <button
-            type="button"
-            onClick={() => setShowPresets(!showPresets)}
-            className="px-3 py-1.5 text-xs font-bold rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white transition shadow-2xs cursor-pointer flex items-center gap-1"
-          >
-            + Add Appliance
-          </button>
-        </div>
+    const removeAppliance = (
+        index
+    ) => {
 
-        {/* Quick Add Presets Modal / Dropdown Box */}
-        {showPresets && (
-          <div className="bg-slate-900 text-white p-4 rounded-2xl space-y-3 animate-in fade-in duration-150">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-2">
-              <p className="text-xs font-bold text-slate-200">Select Common Preset or Custom</p>
-              <button
-                type="button"
-                onClick={() => setShowPresets(false)}
-                className="text-xs text-slate-400 hover:text-white cursor-pointer"
-              >
-                ✕ Close
-              </button>
+        const updatedAppliances =
+            appliances.filter(
+                (_, applianceIndex) =>
+                    applianceIndex !== index
+            );
+
+        onChange(
+            updatedAppliances
+        );
+
+    };
+
+
+    const updateAppliance = (
+        index,
+        field,
+        value
+    ) => {
+
+        const updatedAppliances =
+            appliances.map(
+                (
+                    appliance,
+                    applianceIndex
+                ) => {
+
+                    if (
+                        applianceIndex !==
+                        index
+                    ) {
+                        return appliance;
+                    }
+
+                    return {
+                        ...appliance,
+                        [field]: value
+                    };
+                }
+            );
+
+        onChange(
+            updatedAppliances
+        );
+
+    };
+
+
+    const calculateDailyEnergy = (
+        appliance
+    ) => {
+
+        const quantity =
+            Number(
+                appliance.quantity
+            ) || 0;
+
+        const power =
+            Number(
+                appliance.power_rating_watts
+            ) || 0;
+
+        const hours =
+            Number(
+                appliance.hours_per_day
+            ) || 0;
+
+        const days =
+            Number(
+                appliance.days_per_week
+            ) || 0;
+
+        return (
+            quantity *
+            power *
+            hours *
+            (days / 7)
+        );
+
+    };
+
+
+    const handleContinue = () => {
+
+        setError("");
+
+
+        if (
+            appliances.length === 0
+        ) {
+            setError(
+                "Add at least one appliance before continuing."
+            );
+
+            return;
+        }
+
+
+        for (
+            let index = 0;
+            index < appliances.length;
+            index++
+        ) {
+
+            const appliance =
+                appliances[index];
+
+
+            if (
+                !appliance.appliance_name
+                    ?.trim()
+            ) {
+                setError(
+                    `Enter the name of appliance ${index + 1}.`
+                );
+
+                return;
+            }
+
+
+            if (
+                !appliance.power_rating_watts ||
+                Number(
+                    appliance.power_rating_watts
+                ) <= 0
+            ) {
+                setError(
+                    `Enter a valid power rating for ${appliance.appliance_name}.`
+                );
+
+                return;
+            }
+
+
+            if (
+                appliance.hours_per_day ===
+                    "" ||
+                Number(
+                    appliance.hours_per_day
+                ) < 0
+            ) {
+                setError(
+                    `Enter the hours per day for ${appliance.appliance_name}.`
+                );
+
+                return;
+            }
+
+
+            if (
+                appliance.quantity ===
+                    "" ||
+                Number(
+                    appliance.quantity
+                ) <= 0
+            ) {
+                setError(
+                    `Enter a valid quantity for ${appliance.appliance_name}.`
+                );
+
+                return;
+            }
+
+        }
+
+
+        onNext();
+
+    };
+
+
+    const totalDailyEnergy =
+        appliances.reduce(
+            (
+                total,
+                appliance
+            ) =>
+                total +
+                calculateDailyEnergy(
+                    appliance
+                ),
+            0
+        );
+
+
+    return (
+        <div className="rounded-2xl bg-white p-6 shadow-sm">
+
+            <div className="mb-8">
+
+                <h2 className="text-2xl font-bold text-slate-900">
+                    Your Appliances
+                </h2>
+
+                <p className="mt-2 text-sm text-slate-500">
+                    Enter the appliances used in your household and their typical daily usage.
+                </p>
+
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-              {QUICK_ADD_PRESETS.map((preset) => (
-                <button
-                  key={preset.id}
-                  type="button"
-                  onClick={() => handleAddPreset(preset)}
-                  className="p-2 text-left bg-slate-800 hover:bg-emerald-900/60 border border-slate-700/80 rounded-xl transition cursor-pointer"
-                >
-                  <p className="text-xs font-semibold text-white truncate">{preset.name}</p>
-                  <p className="text-[10px] text-slate-400 mt-0.5">{preset.defaultWatts}W • {preset.defaultHours}h/day</p>
-                </button>
-              ))}
+
+            {error && (
+
+                <div className="mb-6 rounded-xl border border-rose-200 bg-rose-50 px-4 py-3">
+
+                    <p className="text-sm font-medium text-rose-600">
+                        {error}
+                    </p>
+
+                </div>
+
+            )}
+
+
+            <div className="space-y-6">
+
+                {appliances.map(
+                    (
+                        appliance,
+                        index
+                    ) => (
+
+                        <div
+                            key={index}
+                            className="rounded-2xl border border-slate-200 p-5"
+                        >
+
+                            <div className="mb-5 flex items-center justify-between">
+
+                                <h3 className="font-semibold text-slate-900">
+                                    Appliance {index + 1}
+                                </h3>
+
+
+                                {appliances.length > 1 && (
+
+                                    <button
+                                        type="button"
+                                        onClick={() =>
+                                            removeAppliance(
+                                                index
+                                            )
+                                        }
+                                        className="flex items-center gap-2 text-sm font-medium text-rose-600 hover:text-rose-700"
+                                    >
+
+                                        <Trash2
+                                            size={17}
+                                        />
+
+                                        Remove
+
+                                    </button>
+
+                                )}
+
+                            </div>
+
+
+                            <div className="grid gap-5 md:grid-cols-2">
+
+                                <div>
+
+                                    <label className="mb-2 block text-sm font-medium text-slate-700">
+                                        Appliance name
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        value={
+                                            appliance.appliance_name
+                                        }
+                                        onChange={(event) =>
+                                            updateAppliance(
+                                                index,
+                                                "appliance_name",
+                                                event.target.value
+                                            )
+                                        }
+                                        placeholder="e.g. Television"
+                                        className="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-green-500 focus:ring-2 focus:ring-green-100"
+                                    />
+
+                                </div>
+
+
+                                <div>
+
+                                    <label className="mb-2 block text-sm font-medium text-slate-700">
+                                        Category
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        value={
+                                            appliance.appliance_category
+                                        }
+                                        onChange={(event) =>
+                                            updateAppliance(
+                                                index,
+                                                "appliance_category",
+                                                event.target.value
+                                            )
+                                        }
+                                        placeholder="e.g. Kitchen"
+                                        className="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-green-500 focus:ring-2 focus:ring-green-100"
+                                    />
+
+                                </div>
+
+
+                                <div>
+
+                                    <label className="mb-2 block text-sm font-medium text-slate-700">
+                                        Quantity
+                                    </label>
+
+                                    <input
+                                        type="number"
+                                        min="1"
+                                        value={
+                                            appliance.quantity
+                                        }
+                                        onChange={(event) =>
+                                            updateAppliance(
+                                                index,
+                                                "quantity",
+                                                event.target.value
+                                            )
+                                        }
+                                        className="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-green-500 focus:ring-2 focus:ring-green-100"
+                                    />
+
+                                </div>
+
+
+                                <div>
+
+                                    <label className="mb-2 block text-sm font-medium text-slate-700">
+                                        Power rating (Watts)
+                                    </label>
+
+                                    <input
+                                        type="number"
+                                        min="1"
+                                        value={
+                                            appliance.power_rating_watts
+                                        }
+                                        onChange={(event) =>
+                                            updateAppliance(
+                                                index,
+                                                "power_rating_watts",
+                                                event.target.value
+                                            )
+                                        }
+                                        placeholder="e.g. 100"
+                                        className="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-green-500 focus:ring-2 focus:ring-green-100"
+                                    />
+
+                                </div>
+
+
+                                <div>
+
+                                    <label className="mb-2 block text-sm font-medium text-slate-700">
+                                        Hours per day
+                                    </label>
+
+                                    <input
+                                        type="number"
+                                        min="0"
+                                        max="24"
+                                        step="0.5"
+                                        value={
+                                            appliance.hours_per_day
+                                        }
+                                        onChange={(event) =>
+                                            updateAppliance(
+                                                index,
+                                                "hours_per_day",
+                                                event.target.value
+                                            )
+                                        }
+                                        placeholder="e.g. 5"
+                                        className="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-green-500 focus:ring-2 focus:ring-green-100"
+                                    />
+
+                                </div>
+
+
+                                <div>
+
+                                    <label className="mb-2 block text-sm font-medium text-slate-700">
+                                        Days per week
+                                    </label>
+
+                                    <input
+                                        type="number"
+                                        min="1"
+                                        max="7"
+                                        value={
+                                            appliance.days_per_week
+                                        }
+                                        onChange={(event) =>
+                                            updateAppliance(
+                                                index,
+                                                "days_per_week",
+                                                event.target.value
+                                            )
+                                        }
+                                        className="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-green-500 focus:ring-2 focus:ring-green-100"
+                                    />
+
+                                </div>
+
+                            </div>
+
+
+                            <div className="mt-5 flex items-center justify-between rounded-xl bg-slate-50 px-4 py-3">
+
+                                <label className="flex items-center gap-3 text-sm font-medium text-slate-700">
+
+                                    <input
+                                        type="checkbox"
+                                        checked={
+                                            appliance.is_essential
+                                        }
+                                        onChange={(event) =>
+                                            updateAppliance(
+                                                index,
+                                                "is_essential",
+                                                event.target.checked
+                                            )
+                                        }
+                                        className="h-4 w-4 rounded border-slate-300 text-green-600 focus:ring-green-500"
+                                    />
+
+                                    Essential appliance
+
+                                </label>
+
+
+                                <p className="text-sm font-semibold text-slate-700">
+
+                                    {calculateDailyEnergy(
+                                        appliance
+                                    ).toFixed(0)}
+
+                                    {" "}Wh/day
+
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    )
+                )}
+
             </div>
+
 
             <button
-              type="button"
-              onClick={handleAddCustom}
-              className="w-full py-2 text-xs font-semibold rounded-xl bg-slate-800 hover:bg-slate-700 text-emerald-400 border border-slate-700 transition cursor-pointer text-center"
+                type="button"
+                onClick={addAppliance}
+                className="mt-6 flex items-center gap-2 rounded-xl border border-green-600 px-5 py-3 text-sm font-semibold text-green-700 transition hover:bg-green-50"
             >
-              + Add Custom Blank Appliance
+
+                <Plus size={18} />
+
+                Add Appliance
+
             </button>
-          </div>
-        )}
 
-        {/* Appliance Cards */}
-        <div className="space-y-2.5">
-          {appliances.map((item, index) => (
-            <div
-              key={item.id || index}
-              className="bg-white p-3.5 rounded-2xl border border-slate-200/80 shadow-2xs space-y-3"
-            >
-              <div className="flex items-center justify-between gap-2">
-                <input
-                  type="text"
-                  value={item.name}
-                  onChange={(e) => onApplianceChange(index, 'name', e.target.value)}
-                  className="text-xs font-bold text-slate-800 bg-transparent border-b border-transparent hover:border-slate-300 focus:border-emerald-500 focus:outline-hidden px-1 py-0.5 rounded-xs w-full"
-                />
+
+            {appliances.length > 0 && (
+
+                <div className="mt-6 rounded-xl bg-green-50 px-5 py-4">
+
+                    <div className="flex items-center justify-between">
+
+                        <span className="text-sm font-medium text-slate-700">
+                            Estimated daily energy
+                        </span>
+
+                        <span className="text-lg font-bold text-green-700">
+
+                            {totalDailyEnergy.toFixed(0)}
+                            {" "}Wh/day
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+            )}
+
+
+            <div className="mt-8 flex flex-col-reverse gap-3 border-t border-slate-200 pt-6 sm:flex-row sm:items-center sm:justify-between">
+
                 <button
-                  type="button"
-                  onClick={() => onRemoveAppliance(index)}
-                  className="text-slate-400 hover:text-rose-500 text-xs font-bold px-2 py-1 cursor-pointer transition shrink-0"
-                  title="Remove Item"
+                    type="button"
+                    onClick={onBack}
+                    disabled={isSaving}
+                    className="flex items-center justify-center gap-2 rounded-xl border border-slate-300 px-5 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50"
                 >
-                  ✕
+
+                    <ArrowLeft size={18} />
+
+                    Back
+
                 </button>
-              </div>
 
-              <div className="grid grid-cols-3 gap-2">
-                <div>
-                  <label className="block text-[10px] font-medium text-slate-500 mb-1">
-                    Qty
-                  </label>
-                  <input
-                    type="number"
-                    min="1"
-                    value={item.defaultQty}
-                    onChange={(e) => onApplianceChange(index, 'defaultQty', Number(e.target.value))}
-                    className="w-full px-2.5 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-lg text-center focus:outline-hidden focus:border-emerald-500"
-                  />
+
+                <div className="flex flex-col gap-3 sm:flex-row">
+
+                    <button
+                        type="button"
+                        onClick={onSaveExit}
+                        disabled={isSaving}
+                        className="rounded-xl border border-slate-300 px-5 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50"
+                    >
+                        {isSaving
+                            ? "Saving..."
+                            : "Save & Exit"}
+                    </button>
+
+
+                    <button
+                        type="button"
+                        onClick={handleContinue}
+                        disabled={isSaving}
+                        className="rounded-xl bg-green-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-green-700 disabled:cursor-not-allowed disabled:opacity-50"
+                    >
+
+                        {isSaving
+                            ? "Saving..."
+                            : "Continue"}
+
+                    </button>
+
                 </div>
 
-                <div>
-                  <label className="block text-[10px] font-medium text-slate-500 mb-1">
-                    Power (Watts)
-                  </label>
-                  <input
-                    type="number"
-                    step="10"
-                    value={item.defaultWatts}
-                    onChange={(e) => onApplianceChange(index, 'defaultWatts', Number(e.target.value))}
-                    className="w-full px-2.5 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-lg text-center focus:outline-hidden focus:border-emerald-500"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-[10px] font-medium text-slate-500 mb-1">
-                    Hours / Day
-                  </label>
-                  <input
-                    type="number"
-                    step="0.5"
-                    max="24"
-                    value={item.defaultHours}
-                    onChange={(e) => onApplianceChange(index, 'defaultHours', Number(e.target.value))}
-                    className="w-full px-2.5 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-lg text-center focus:outline-hidden focus:border-emerald-500"
-                  />
-                </div>
-              </div>
             </div>
-          ))}
+
         </div>
-      </div>
-    </div>
-  );
+    );
 }

@@ -5,19 +5,21 @@ import React, {
 
 import {
     ArrowLeft,
-    Plus
+    Calculator,
+    Home,
+    Plug
 } from "lucide-react";
 
 import ApplianceList from "./ApplianceList";
-import ApplianceForm from "./ApplianceForm";
 
 import {
-    getMyAppliances
+    getHouseholdAppliances
 } from "../../services/applianceService";
 
 
 export default function AppliancePage({
-    onNavigate
+    onNavigate,
+    householdId
 }) {
 
     const [
@@ -29,12 +31,6 @@ export default function AppliancePage({
     const [
         isLoading,
         setIsLoading
-    ] = useState(true);
-
-
-    const [
-        showForm,
-        setShowForm
     ] = useState(false);
 
 
@@ -46,24 +42,48 @@ export default function AppliancePage({
 
     const loadAppliances = async () => {
 
+        if (
+            !householdId
+        ) {
+
+            setAppliances([]);
+
+            return;
+
+        }
+
+
         try {
 
-            setIsLoading(true);
+            setIsLoading(
+                true
+            );
+
             setError("");
 
 
+            const response =
+                await getHouseholdAppliances(
+                    householdId
+                );
+
+
             const data =
-                await getMyAppliances();
+                response?.appliances ??
+                response ??
+                [];
 
 
             setAppliances(
-                data.appliances || []
+                Array.isArray(data)
+                    ? data
+                    : []
             );
 
         } catch (error) {
 
             console.error(
-                "Appliance loading error:",
+                "Failed to load appliances:",
                 error
             );
 
@@ -75,7 +95,9 @@ export default function AppliancePage({
 
         } finally {
 
-            setIsLoading(false);
+            setIsLoading(
+                false
+            );
 
         }
 
@@ -86,70 +108,163 @@ export default function AppliancePage({
 
         loadAppliances();
 
-    }, []);
+    }, [
+        householdId
+    ]);
 
 
-    const handleApplianceCreated = async () => {
+    const handleStartAssessment = () => {
 
-        setShowForm(false);
-
-        await loadAppliances();
+        onNavigate(
+            "assessments",
+            {
+                householdId,
+                startAssessment: true
+            }
+        );
 
     };
+
+
+    if (
+        !householdId
+    ) {
+
+        return (
+            <div className="min-h-screen bg-slate-50">
+
+                <div className="mx-auto max-w-7xl px-6 py-8">
+
+                    <button
+                        type="button"
+                        onClick={() =>
+                            onNavigate(
+                                "households"
+                            )
+                        }
+                        className="mb-8 flex items-center gap-2 text-sm font-semibold text-slate-600 hover:text-slate-900"
+                    >
+
+                        <ArrowLeft
+                            size={18}
+                        />
+
+                        Back to Households
+
+                    </button>
+
+
+                    <div className="rounded-2xl border border-slate-200 bg-white p-10 text-center shadow-sm">
+
+                        <Home
+                            className="mx-auto mb-4 text-slate-400"
+                            size={42}
+                        />
+
+                        <h2 className="text-xl font-bold text-slate-900">
+                            No Household Selected
+                        </h2>
+
+                        <p className="mx-auto mt-2 max-w-md text-sm text-slate-500">
+                            Select a household before viewing
+                            its appliances.
+                        </p>
+
+
+                        <button
+                            type="button"
+                            onClick={() =>
+                                onNavigate(
+                                    "households"
+                                )
+                            }
+                            className="mt-6 rounded-xl bg-green-600 px-5 py-3 text-sm font-semibold text-white hover:bg-green-700"
+                        >
+                            View Households
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+        );
+
+    }
 
 
     return (
         <div className="min-h-screen bg-slate-50">
 
-            <main className="mx-auto max-w-7xl px-6 py-8">
+            <div className="mx-auto max-w-7xl px-6 py-8">
 
-                <button
-                    type="button"
-                    onClick={() =>
-                        onNavigate("dashboard")
-                    }
-                    className="mb-6 flex items-center gap-2 text-sm font-semibold text-slate-600 transition hover:text-slate-900"
-                >
-
-                    <ArrowLeft size={18} />
-
-                    Dashboard
-
-                </button>
-
-
-                <div className="mb-8 flex items-center justify-between">
+                <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
 
                     <div>
-
-                        <h1 className="text-2xl font-bold text-slate-900">
-                            My Appliances
-                        </h1>
-
-                        <p className="mt-1 text-sm text-slate-500">
-                            Manage appliances used to calculate household energy consumption.
-                        </p>
-
-                    </div>
-
-
-                    {!showForm && (
 
                         <button
                             type="button"
                             onClick={() =>
-                                setShowForm(true)
+                                onNavigate(
+                                    "households"
+                                )
                             }
-                            className="flex items-center gap-2 rounded-xl bg-green-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-green-700"
+                            className="mb-4 flex items-center gap-2 text-sm font-semibold text-slate-600 hover:text-slate-900"
                         >
 
-                            <Plus size={18} />
+                            <ArrowLeft
+                                size={18}
+                            />
 
-                            Add Appliance
+                            Back to Households
 
                         </button>
 
-                    )}
+
+                        <div className="flex items-center gap-3">
+
+                            <div className="rounded-xl bg-green-100 p-3">
+
+                                <Plug
+                                    size={24}
+                                    className="text-green-700"
+                                />
+
+                            </div>
+
+
+                            <div>
+
+                                <h1 className="text-2xl font-bold text-slate-900">
+                                    Household Appliances
+                                </h1>
+
+                                <p className="mt-1 text-sm text-slate-500">
+                                    Household #{householdId}
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <button
+                        type="button"
+                        onClick={
+                            handleStartAssessment
+                        }
+                        className="flex items-center justify-center gap-2 rounded-xl bg-green-600 px-5 py-3 text-sm font-semibold text-white shadow-sm hover:bg-green-700"
+                    >
+
+                        <Calculator
+                            size={18}
+                        />
+
+                        Start Assessment
+
+                    </button>
 
                 </div>
 
@@ -167,24 +282,6 @@ export default function AppliancePage({
                 )}
 
 
-                {showForm && (
-
-                    <div className="mb-8">
-
-                        <ApplianceForm
-                            onSuccess={
-                                handleApplianceCreated
-                            }
-                            onCancel={() =>
-                                setShowForm(false)
-                            }
-                        />
-
-                    </div>
-
-                )}
-
-
                 <ApplianceList
                     appliances={
                         appliances
@@ -194,8 +291,44 @@ export default function AppliancePage({
                     }
                 />
 
-            </main>
+
+                {!isLoading &&
+                    appliances.length === 0 && (
+
+                        <div className="mt-6 rounded-2xl border border-dashed border-slate-300 bg-white p-10 text-center">
+
+                            <Plug
+                                className="mx-auto mb-4 text-slate-400"
+                                size={42}
+                            />
+
+                            <h2 className="text-lg font-bold text-slate-900">
+                                No Appliances Yet
+                            </h2>
+
+                            <p className="mx-auto mt-2 max-w-md text-sm text-slate-500">
+                                Appliances are added during
+                                the solar assessment process.
+                            </p>
+
+
+                            <button
+                                type="button"
+                                onClick={
+                                    handleStartAssessment
+                                }
+                                className="mt-6 rounded-xl bg-green-600 px-5 py-3 text-sm font-semibold text-white hover:bg-green-700"
+                            >
+                                Start Assessment
+                            </button>
+
+                        </div>
+
+                    )}
+
+            </div>
 
         </div>
     );
+
 }

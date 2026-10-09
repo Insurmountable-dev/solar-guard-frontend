@@ -5,3 +5,14 @@
     @apply antialiased text-slate-800 bg-slate-50;
   }
 }
+
+
+@media (max-width: 767px) {
+    .hide-scrollbar-mobile {
+        scrollbar-width: none;
+    }
+
+    .hide-scrollbar-mobile::-webkit-scrollbar {
+        display: none;
+    }
+}

@@ -1,17 +1,8 @@
 import React from "react";
-import {
-    Plus,
-    Home,
-    Plug,
-    ClipboardList
-} from "lucide-react";
+import {Plus, Home, Plug, ClipboardList } from "lucide-react";
 
-export default function QuickActions({
-    onNewAssessment,
-    onHousehold,
-    onAppliances,
-    onAssessments
-}) {
+export default function QuickActions({onNewAssessment, onHousehold, onAppliances, onAssessments}) {
+
     const actions = [
         {
             label: "New Assessment",
@@ -40,19 +31,18 @@ export default function QuickActions({
     ];
 
     return (
-        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-            <div className="mb-5">
-                <h2 className="text-lg font-semibold text-slate-900">
-                    Quick Actions
-                </h2>
 
-                <p className="mt-1 text-sm text-slate-500">
-                    Quickly access Solar Guard features.
-                </p>
+        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+
+            <div className="mb-5">
+                <h2 className="text-lg font-semibold text-slate-900">Quick Actions</h2>
+                <p className="mt-1 text-sm text-slate-500">Quickly access Solar Guard features.</p>
             </div>
 
             <div className="space-y-3">
+
                 {actions.map((action) => {
+
                     const Icon = action.icon;
 
                     return (
@@ -67,18 +57,18 @@ export default function QuickActions({
                             </div>
 
                             <div>
-                                <p className="text-sm font-semibold text-slate-800">
-                                    {action.label}
-                                </p>
+                                <p className="text-sm font-semibold text-slate-800">{action.label} </p>
+                                <p className="mt-0.5 text-xs text-slate-500">{action.description}</p>
 
-                                <p className="mt-0.5 text-xs text-slate-500">
-                                    {action.description}
-                                </p>
                             </div>
                         </button>
                     );
+
                 })}
+                
             </div>
+
         </div>
+
     );
 }

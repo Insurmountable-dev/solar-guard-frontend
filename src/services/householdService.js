@@ -1,30 +1,42 @@
-import apiClient from "./apiClient";
+import apiClient from "../api/apiClient";
+
 
 export const getMyHouseholds = async () => {
-    const response = await apiClient.get(
-        "/households/me"
-    );
+
+    const response =
+        await apiClient.get(
+            "/households/me"
+        );
 
     return response.data;
+
 };
+
 
 export const getHouseholdById = async (
     householdId
 ) => {
-    const response = await apiClient.get(
-        `/households/${householdId}`
-    );
+
+    const response =
+        await apiClient.get(
+            `/households/${householdId}`
+        );
 
     return response.data;
+
 };
+
 
 export const createHousehold = async (
     householdData
 ) => {
-    const response = await apiClient.post(
-        "/households",
-        householdData
-    );
+
+    const response =
+        await apiClient.post(
+            "/households",
+            householdData
+        );
 
     return response.data;
+
 };

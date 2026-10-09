@@ -1,43 +1,34 @@
-import React from "react";
-import {
-    User,
-    Mail,
-    Phone,
-    MapPin,
-    Lock
-} from "lucide-react";
-
+import {Link} from "react-router-dom";
+import {User, Mail, Phone, MapPin, Lock } from "lucide-react";
 import InputField from "../common/InputField";
 import Button from "../common/Button";
+import PasswordRequirements from "./passwordRequirement";
 import { useRegister } from "../../hooks/useRegister";
 
-export default function RegisterForm({
-    onSuccess,
-    onLogin
-}) {
-    const {
-        formData,
-        errors,
-        serverError,
-        isLoading,
-        handleChange,
-        handleSubmit
-    } = useRegister(onSuccess);
+
+export default function RegisterForm({onSuccess}) {
+
+    const {formData, errors, serverError, isLoading, handleChange, handleSubmit} = useRegister(onSuccess);
+
 
     return (
-        <form
-            onSubmit={handleSubmit}
-            className="space-y-5"
-        >
+
+        <form onSubmit={handleSubmit} className="space-y-5"  >
+
             {serverError && (
+
                 <div className="rounded-xl border border-rose-200 bg-rose-50 px-4 py-3">
                     <p className="text-sm font-medium text-rose-600">
                         {serverError}
                     </p>
+
                 </div>
+
             )}
 
+
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+
                 <InputField
                     label="First Name"
                     name="first_name"
@@ -49,6 +40,7 @@ export default function RegisterForm({
                     icon={User}
                 />
 
+
                 <InputField
                     label="Last Name"
                     name="last_name"
@@ -59,9 +51,12 @@ export default function RegisterForm({
                     required
                     icon={User}
                 />
+
             </div>
 
+
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+
                 <InputField
                     label="Email Address"
                     name="email"
@@ -74,6 +69,7 @@ export default function RegisterForm({
                     icon={Mail}
                 />
 
+
                 <InputField
                     label="Phone Number"
                     name="phone_number"
@@ -83,9 +79,12 @@ export default function RegisterForm({
                     onChange={handleChange}
                     icon={Phone}
                 />
+
             </div>
 
+
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+
                 <InputField
                     label="County"
                     name="county"
@@ -95,6 +94,7 @@ export default function RegisterForm({
                     icon={MapPin}
                 />
 
+
                 <InputField
                     label="Town"
                     name="town"
@@ -103,9 +103,12 @@ export default function RegisterForm({
                     onChange={handleChange}
                     icon={MapPin}
                 />
+
             </div>
 
+
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+
                 <InputField
                     label="Password"
                     name="password"
@@ -118,6 +121,7 @@ export default function RegisterForm({
                     icon={Lock}
                 />
 
+
                 <InputField
                     label="Confirm Password"
                     name="confirm_password"
@@ -129,7 +133,12 @@ export default function RegisterForm({
                     required
                     icon={Lock}
                 />
+
             </div>
+
+
+            <PasswordRequirements password={formData.password} />
+
 
             <Button
                 type="submit"
@@ -141,18 +150,26 @@ export default function RegisterForm({
                 Create Account
             </Button>
 
+
             <div className="text-center">
+
                 <p className="text-sm text-slate-500">
+
                     Already have an account?{" "}
-                    <button
+
+                    <Link to = "/login"
                         type="button"
-                        onClick={onLogin}
                         className="font-semibold text-emerald-600 hover:text-emerald-700"
                     >
                         Sign in
-                    </button>
+                    </Link>
+
                 </p>
+
             </div>
+
         </form>
+
     );
+
 }

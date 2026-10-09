@@ -1,86 +1,249 @@
-import apiClient from "./apiClient";
+import {
+    createHousehold
+} from "./householdService";
 
-export const createAssessment = async (
-    assessmentData
-) => {
-    const response = await apiClient.post(
-        "/solar-assessments",
-        assessmentData
-    );
 
-    return response.data;
-};
+import {
+    createMeasurement
+} from "./measurementService";
 
-export const getMyAssessments = async () => {
-    const response = await apiClient.get(
-        "/solar-assessments"
-    );
 
-    return response.data;
-};
+import {
+    createAppliances
+} from "./applianceService";
 
-export const getAssessmentsByHousehold = async (
-    householdId
-) => {
-    const response = await apiClient.get(
-        `/solar-assessments/household/${householdId}`
-    );
 
-    return response.data;
-};
+import {
+    createAssessment as createAssessmentApi,
+    getMyAssessments,
+    getAssessmentsByHousehold,
+    getAssessmentById,
+    updateAssessmentStatus,
+    getAssessmentAppliances,
+    getAssessmentResult
+} from "./solarAssessmentService";
 
-export const getAssessmentById = async (
-    assessmentId
-) => {
-    const response = await apiClient.get(
-        `/solar-assessments/${assessmentId}`
-    );
 
-    return response.data;
-};
+import {
+    calculateSolarSystem as calculateSolarSystemApi
+} from "./solarCalculationService";
 
-export const updateAssessmentStatus = async (
-    assessmentId,
-    assessmentStatus
-) => {
-    const response = await apiClient.patch(
-        `/solar-assessments/${assessmentId}/status`,
-        {
-            assessment_status:
-                assessmentStatus
+
+/*
+|--------------------------------------------------------------------------
+| HOUSEHOLD
+|--------------------------------------------------------------------------
+*/
+
+export const saveHousehold =
+    async (
+        householdData
+    ) => {
+
+        const response =
+            await createHousehold(
+                householdData
+            );
+
+
+        const household =
+            response.data ||
+            response.household ||
+            response;
+
+
+        if (
+            !household.household_id
+        ) {
+
+            throw new Error(
+                "Household ID was not returned by the server."
+            );
+
         }
-    );
 
-    return response.data;
-};
 
-export const getAssessmentAppliances = async (
-    assessmentId
-) => {
-    const response = await apiClient.get(
-        `/assessment-appliances/assessment/${assessmentId}`
-    );
+        return household;
 
-    return response.data;
-};
+    };
 
-export const getAssessmentResult = async (
-    assessmentId
-) => {
-    const response = await apiClient.get(
-        `/solar-assessment-results/assessment/${assessmentId}`
-    );
 
-    return response.data;
-};
+/*
+|--------------------------------------------------------------------------
+| MEASUREMENT
+|--------------------------------------------------------------------------
+*/
 
-export const calculateSolarSystem = async (
-    householdId,
-    assessmentId
-) => {
-    const response = await apiClient.get(
-        `/solar-calculations/household/${householdId}/assessment/${assessmentId}`
-    );
+export const saveMeasurement =
+    async (
+        householdId,
+        measurementData
+    ) => {
 
-    return response.data;
+        const response =
+            await createMeasurement(
+                householdId,
+                measurementData
+            );
+
+
+        return (
+            response.data ||
+            response.measurement ||
+            response
+        );
+
+    };
+
+
+/*
+|--------------------------------------------------------------------------
+| APPLIANCES
+|--------------------------------------------------------------------------
+*/
+
+export const saveAppliances =
+    async (
+        householdId,
+        appliances
+    ) => {
+
+        const response =
+            await createAppliances(
+                householdId,
+                appliances
+            );
+
+
+        return (
+            response.data ||
+            response.appliances ||
+            response
+        );
+
+    };
+
+
+/*
+|--------------------------------------------------------------------------
+| CREATE ASSESSMENT
+|--------------------------------------------------------------------------
+*/
+
+export const createAssessment =
+    async (
+        assessmentData
+    ) => {
+
+        return await createAssessmentApi(
+            assessmentData
+        );
+
+    };
+
+
+/*
+|--------------------------------------------------------------------------
+| SAVE DRAFT ASSESSMENT
+|--------------------------------------------------------------------------
+*/
+
+export const saveAssessment =
+    async (
+        householdId
+    ) => {
+
+        const response =
+            await createAssessmentApi({
+                household_id:
+                    householdId,
+
+                assessment_status:
+                    "draft"
+            });
+
+
+        const assessment =
+            response.data ||
+            response.assessment ||
+            response;
+
+
+        if (
+            !assessment.assessment_id
+        ) {
+
+            throw new Error(
+                "Assessment ID was not returned by the server."
+            );
+
+        }
+
+
+        return assessment;
+
+    };
+
+
+/*
+|--------------------------------------------------------------------------
+| CALCULATE SOLAR SYSTEM
+|--------------------------------------------------------------------------
+*/
+
+export const calculateSolarSystem =
+    async (
+        householdId,
+        assessmentId
+    ) => {
+
+        const response =
+            await calculateSolarSystemApi(
+                householdId,
+                assessmentId
+            );
+
+
+        return (
+            response.data ||
+            response.result ||
+            response
+        );
+
+    };
+
+
+/*
+|--------------------------------------------------------------------------
+| CALCULATE ASSESSMENT
+|--------------------------------------------------------------------------
+*/
+
+export const calculateAssessment =
+    async (
+        householdId,
+        assessmentId
+    ) => {
+
+        return await calculateSolarSystem(
+            householdId,
+            assessmentId
+        );
+
+    };
+
+
+/*
+|--------------------------------------------------------------------------
+| RE-EXPORT ASSESSMENT FUNCTIONS
+|--------------------------------------------------------------------------
+*/
+
+export {
+    getMyAssessments,
+    getAssessmentsByHousehold,
+    getAssessmentById,
+    updateAssessmentStatus,
+    getAssessmentAppliances,
+    getAssessmentResult
 };

@@ -1,227 +1,32 @@
-import React, {
-    useEffect,
-    useState
-} from "react";
+import { Navigate, Route, Routes } from "react-router-dom";
 
-import {
-    useAuth
-} from "./contexts/AuthContext";
+import DashboardPage from "./pages/DashboardPage";
+import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
 
-import LoginPage from "./components/auth/LoginPage";
-import RegisterPage from "./components/auth/RegisterPage";
+// import AppliancePage from "./components/appliance/AppliancePage";
+// import AssessmentPage from "./components/assessment/AssessmentPage";
+// import HouseholdPage from "./components/household/HouseholdPage";
 
-import DashboardPage from "./components/dashboard/DashboardPage";
-import HouseholdPage from "./components/household/HouseholdPage";
-import AppliancePage from "./components/appliance/AppliancePage";
-import AssessmentPage from "./components/assessment/AssessmentPage";
-
+import ProtectedRoute from "./routes/ProtectedRoute";
 
 export default function App() {
+  return (
+    <Routes>
+      
+      <Route path="/login"    element={<LoginPage />} />
+      <Route path="/register" element={<RegisterPage />} />
 
-    const {
-        isAuthenticated,
-        login
-    } = useAuth();
+      <Route element={<ProtectedRoute />}>
+        <Route path="/dashboard" element={<DashboardPage />} />
+        {/* <Route path="/households" element={<HouseholdPage />} />
+        <Route path="/appliances" element={<AppliancePage />} />
+        <Route path="/assessments" element={<AssessmentPage />} /> */}
+      </Route>
 
+      <Route path="/" element={<Navigate to="/dashboard" replace />} />
+      <Route path="*" element={<Navigate to="/dashboard" replace />} />
 
-    const [
-        currentView,
-        setCurrentView
-    ] = useState(() => {
-
-        return (
-            sessionStorage.getItem(
-                "solarGuardView"
-            ) || "dashboard"
-        );
-
-    });
-
-
-    const [
-        currentAssessment,
-        setCurrentAssessment
-    ] = useState(null);
-
-
-    useEffect(() => {
-
-        sessionStorage.setItem(
-            "solarGuardView",
-            currentView
-        );
-
-    }, [currentView]);
-
-
-    const navigate = (
-        view
-    ) => {
-
-        setCurrentView(view);
-
-    };
-
-
-    const handleLoginSuccess = (
-        authData
-    ) => {
-
-        console.log(
-            "LOGIN SUCCESS:",
-            authData
-        );
-
-
-        login(
-            authData
-        );
-
-
-        setCurrentView(
-            "dashboard"
-        );
-
-    };
-
-
-    const handleRegisterSuccess = (
-        authData
-    ) => {
-
-        login(
-            authData
-        );
-
-
-        setCurrentView(
-            "dashboard"
-        );
-
-    };
-
-
-    const handleAssessmentCreated = (
-        assessment
-    ) => {
-
-        setCurrentAssessment(
-            assessment
-        );
-
-
-        setCurrentView(
-            "assessments"
-        );
-
-    };
-
-
-    if (!isAuthenticated) {
-
-        if (
-            currentView === "register"
-        ) {
-
-            return (
-                <RegisterPage
-                    onSuccess={
-                        handleRegisterSuccess
-                    }
-                    onLogin={() =>
-                        setCurrentView(
-                            "login"
-                        )
-                    }
-                />
-            );
-
-        }
-
-
-        return (
-            <LoginPage
-                onSuccess={
-                    handleLoginSuccess
-                }
-                onRegister={() =>
-                    setCurrentView(
-                        "register"
-                    )
-                }
-                onForgotPassword={() => {
-                    console.log(
-                        "Forgot password clicked"
-                    );
-                }}
-            />
-        );
-
-    }
-
-
-    switch (currentView) {
-
-        case "dashboard":
-
-            return (
-                <DashboardPage
-                    onNavigate={
-                        navigate
-                    }
-                />
-            );
-
-
-        case "households":
-
-            return (
-                <HouseholdPage
-                    onNavigate={
-                        navigate
-                    }
-                    onAssessmentCreated={
-                        handleAssessmentCreated
-                    }
-                />
-            );
-
-
-        case "appliances":
-
-            return (
-                <AppliancePage
-                    onNavigate={
-                        navigate
-                    }
-                />
-            );
-
-
-        case "assessments":
-
-            return (
-                <AssessmentPage
-                    onNavigate={
-                        navigate
-                    }
-                    initialAssessment={
-                        currentAssessment
-                    }
-                />
-            );
-
-
-        default:
-
-            return (
-                <DashboardPage
-                    onNavigate={
-                        navigate
-                    }
-                />
-            );
-
-    }
-
+    </Routes>
+  );
 }

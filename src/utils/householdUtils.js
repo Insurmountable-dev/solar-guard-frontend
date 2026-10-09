@@ -1,19 +1,14 @@
-export const formatHouseholdValue = (
-    value,
-    fallback = "Not specified"
-) => {
+
+export const formatHouseholdValue = (value,fallback = "Not specified" ) => {
     return value || fallback;
 };
 
-export const formatBooleanValue = (
-    value
-) => {
+export const formatBooleanValue = (value) => {
     return value ? "Yes" : "No";
 };
 
-export const formatHouseType = (
-    houseType
-) => {
+export const formatHouseType = (houseType) => {
+
     if (!houseType) {
         return "Not specified";
     }
@@ -25,9 +20,8 @@ export const formatHouseType = (
         );
 };
 
-export const formatBuildingType = (
-    buildingType
-) => {
+export const formatBuildingType = ( buildingType) => {
+
     if (!buildingType) {
         return "Not specified";
     }

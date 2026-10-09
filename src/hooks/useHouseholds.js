@@ -1,4 +1,5 @@
 import {
+    useCallback,
     useEffect,
     useState
 } from "react";
@@ -9,7 +10,6 @@ import {
 } from "../services/householdService";
 
 export default function useHouseholds() {
-
     const [
         households,
         setHouseholds
@@ -33,76 +33,80 @@ export default function useHouseholds() {
     const [
         error,
         setError
-    ] = useState("");
+    ] = useState(null);
 
-    const loadHouseholds = async () => {
-        try {
-            setIsLoading(true);
-            setError("");
+    const loadHouseholds = useCallback(
+        async () => {
+            try {
+                setIsLoading(true);
+                setError(null);
 
-            const data =
-                await getMyHouseholds();
+                const data =
+                    await getMyHouseholds();
 
-            setHouseholds(
-                data.households || []
-            );
-
-        } catch (error) {
-            console.error(
-                "Household loading error:",
-                error
-            );
-
-            setError(
-                error.response?.data?.message ||
-                "Failed to load households."
-            );
-
-        } finally {
-            setIsLoading(false);
-        }
-    };
-
-    const loadHouseholdDetails = async (
-        householdId
-    ) => {
-        try {
-            setIsLoadingDetails(true);
-            setError("");
-
-            const household =
-                await getHouseholdById(
-                    householdId
+                setHouseholds(
+                    Array.isArray(data)
+                        ? data
+                        : data.households || []
+                );
+            } catch (error) {
+                console.error(
+                    "Failed to load households:",
+                    error
                 );
 
-            setSelectedHousehold(
-                household.household ||
-                household
-            );
+                setError(
+                    error.response?.data?.message ||
+                    "Failed to load households."
+                );
+            } finally {
+                setIsLoading(false);
+            }
+        },
+        []
+    );
 
-        } catch (error) {
-            console.error(
-                "Household details error:",
-                error
-            );
+    const loadHouseholdDetails =
+        useCallback(
+            async (householdId) => {
+                try {
+                    setIsLoadingDetails(true);
+                    setError(null);
 
-            setError(
-                error.response?.data?.message ||
-                "Failed to load household details."
-            );
+                    const data =
+                        await getHouseholdById(
+                            householdId
+                        );
 
-        } finally {
-            setIsLoadingDetails(false);
-        }
-    };
+                    setSelectedHousehold(
+                        data.household ||
+                        data
+                    );
+                } catch (error) {
+                    console.error(
+                        "Failed to load household details:",
+                        error
+                    );
 
-    const clearSelectedHousehold = () => {
-        setSelectedHousehold(null);
-    };
+                    setError(
+                        error.response?.data?.message ||
+                        "Failed to load household details."
+                    );
+                } finally {
+                    setIsLoadingDetails(false);
+                }
+            },
+            []
+        );
+
+    const clearSelectedHousehold =
+        useCallback(() => {
+            setSelectedHousehold(null);
+        }, []);
 
     useEffect(() => {
         loadHouseholds();
-    }, []);
+    }, [loadHouseholds]);
 
     return {
         households,

@@ -1,153 +1,304 @@
 import React, {
+    useEffect,
     useState
 } from "react";
 
-import HouseholdHeader from "./HouseHolderHeader";
-import HouseholdDetails from "./HouseHoldDetails";
+import HouseholdHeader from "./HouseholdHeader";
 import HouseholdList from "./HouseholdList";
-import HouseholdForm from "./HouseholdForm";
+import HouseholdDetails from "./HouseholdDetails";
 
-import useHouseholds from "../../hooks/useHouseholds";
-import useAssessments from "../../hooks/useAssessments";
+import {
+    getMyHouseholds,
+    getHouseholdById
+} from "../../services/householdService";
+
 
 export default function HouseholdPage({
-    onNavigate,
-    onAssessmentCreated
+    onNavigate
 }) {
 
     const [
-        showForm,
-        setShowForm
+        households,
+        setHouseholds
+    ] = useState([]);
+
+
+    const [
+        selectedHousehold,
+        setSelectedHousehold
+    ] = useState(null);
+
+
+    const [
+        isLoading,
+        setIsLoading
+    ] = useState(true);
+
+
+    const [
+        detailsLoading,
+        setDetailsLoading
     ] = useState(false);
 
-    const {
-        households,
-        selectedHousehold,
-        isLoading,
-        isLoadingDetails,
+
+    const [
         error,
-        loadHouseholdDetails,
-        clearSelectedHousehold,
-        loadHouseholds
-    } = useHouseholds();
+        setError
+    ] = useState("");
 
-    const {
-        startAssessment,
-        isLoading: isAssessmentLoading,
-        error: assessmentError
-    } = useAssessments();
 
-    const handleHouseholdCreated = () => {
-        setShowForm(false);
+    const loadHouseholds = async () => {
+
+        try {
+
+            setIsLoading(
+                true
+            );
+
+            setError("");
+
+
+            const response =
+                await getMyHouseholds();
+
+
+            const data =
+                response?.households ??
+                response ??
+                [];
+
+
+            setHouseholds(
+                Array.isArray(data)
+                    ? data
+                    : []
+            );
+
+        } catch (error) {
+
+            console.error(
+                "Failed to load households:",
+                error
+            );
+
+
+            setError(
+                error.response?.data?.message ||
+                "Failed to load households."
+            );
+
+        } finally {
+
+            setIsLoading(
+                false
+            );
+
+        }
+
+    };
+
+
+    useEffect(() => {
+
         loadHouseholds();
-    };
 
-    const handleViewDetails = (
+    }, []);
+
+
+    const handleViewHousehold = async (
         householdId
     ) => {
-        loadHouseholdDetails(
-            householdId
-        );
-    };
 
-    const handleAssess = async (
-        householdId
-    ) => {
-        const data = await startAssessment(
-            householdId
-        );
+        try {
 
-        if (
-            data &&
-            onAssessmentCreated
-        ) {
-            onAssessmentCreated(
+            setDetailsLoading(
+                true
+            );
+
+            setError("");
+
+
+            const response =
+                await getHouseholdById(
+                    householdId
+                );
+
+
+            const data =
+                response?.household ??
+                response;
+
+
+            setSelectedHousehold(
                 data
             );
+
+        } catch (error) {
+
+            console.error(
+                "Failed to load household details:",
+                error
+            );
+
+
+            setError(
+                error.response?.data?.message ||
+                "Failed to load household details."
+            );
+
+        } finally {
+
+            setDetailsLoading(
+                false
+            );
+
         }
+
     };
 
-    const displayError =
-        error ||
-        assessmentError;
+
+    const handleViewAppliances = (
+        householdId
+    ) => {
+
+        onNavigate(
+            "appliances",
+            {
+                householdId,
+                startAssessment: false
+            }
+        );
+
+    };
+
+
+    const handleViewAssessments = (
+        householdId
+    ) => {
+
+        onNavigate(
+            "assessments",
+            {
+                householdId,
+                startAssessment: false
+            }
+        );
+
+    };
+
+
+    const handleStartAssessment = (
+        householdId
+    ) => {
+
+        onNavigate(
+            "assessments",
+            {
+                householdId,
+                startAssessment: true
+            }
+        );
+
+    };
+
+
+    const handleStartNewAssessment = () => {
+
+        onNavigate(
+            "assessments",
+            {
+                householdId: null,
+                startAssessment: true
+            }
+        );
+
+    };
+
 
     return (
         <div className="min-h-screen bg-slate-50">
 
-            <main className="mx-auto max-w-7xl px-6 py-8">
+            <div className="mx-auto max-w-7xl px-6 py-8">
 
                 <HouseholdHeader
                     onNavigate={
                         onNavigate
                     }
-                    onAddHousehold={() =>
-                        setShowForm(true)
+                    onStartAssessment={
+                        handleStartNewAssessment
                     }
                 />
 
-                {displayError && (
-                    <ErrorMessage
-                        message={
-                            displayError
-                        }
-                    />
+
+                {error && (
+
+                    <div className="mb-6 rounded-xl border border-rose-200 bg-rose-50 px-4 py-3">
+
+                        <p className="text-sm font-medium text-rose-600">
+                            {error}
+                        </p>
+
+                    </div>
+
                 )}
 
-                {showForm && (
-                    <HouseholdForm
-                        onSuccess={
-                            handleHouseholdCreated
-                        }
-                        onCancel={() =>
-                            setShowForm(false)
-                        }
-                    />
-                )}
-
-                <HouseholdDetails
-                    household={
-                        selectedHousehold
-                    }
-                    isLoading={
-                        isLoadingDetails
-                    }
-                    onClose={
-                        clearSelectedHousehold
-                    }
-                />
 
                 <HouseholdList
                     households={
                         households
                     }
                     isLoading={
-                        isLoading ||
-                        isAssessmentLoading
+                        isLoading
                     }
                     onViewDetails={
-                        handleViewDetails
+                        handleViewHousehold
+                    }
+                    onViewAppliances={
+                        handleViewAppliances
+                    }
+                    onViewAssessments={
+                        handleViewAssessments
                     }
                     onAssess={
-                        handleAssess
+                        handleStartAssessment
                     }
                 />
 
-            </main>
+
+                {selectedHousehold && (
+
+                    <div className="mt-8">
+
+                        <HouseholdDetails
+                            household={
+                                selectedHousehold
+                            }
+                            isLoading={
+                                detailsLoading
+                            }
+                            onBack={() =>
+                                setSelectedHousehold(
+                                    null
+                                )
+                            }
+                            onViewAppliances={
+                                handleViewAppliances
+                            }
+                            onViewAssessments={
+                                handleViewAssessments
+                            }
+                            onStartAssessment={
+                                handleStartAssessment
+                            }
+                        />
+
+                    </div>
+
+                )}
+
+            </div>
 
         </div>
     );
-}
 
-function ErrorMessage({
-    message
-}) {
-    return (
-        <div className="mb-6 rounded-xl border border-rose-200 bg-rose-50 px-4 py-3">
-
-            <p className="text-sm font-medium text-rose-600">
-                {message}
-            </p>
-
-        </div>
-    );
 }

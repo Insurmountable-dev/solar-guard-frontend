@@ -1,32 +1,18 @@
-import React from "react";
-import {
-    Mail,
-    Lock
-} from "lucide-react";
-
+import { Link } from "react-router-dom";
+import { Mail,Lock } from "lucide-react";
 import InputField from "../common/InputField";
 import Button from "../common/Button";
 import { useLogin } from "../../hooks/useLogin";
 
-export default function LoginForm({
-    onSuccess,
-    onRegister,
-    onForgotPassword
-}) {
-    const {
-        formData,
-        errors,
-        serverError,
-        isLoading,
-        handleChange,
-        handleSubmit
-    } = useLogin(onSuccess);
+export default function LoginForm({ onSuccess}) {
+
+    const {formData, errors, serverError, isLoading, handleChange, handleSubmit } = useLogin(onSuccess);
 
     return (
-        <form
-            onSubmit={handleSubmit}
-            className="space-y-5"
-        >
+
+        <form onSubmit = {handleSubmit} className="space-y-5" >
+
+            {/* Displays Sever Error If It Exists */}
             {serverError && (
                 <div className="rounded-xl border border-rose-200 bg-rose-50 px-4 py-3">
                     <p className="text-sm font-medium text-rose-600">
@@ -35,11 +21,12 @@ export default function LoginForm({
                 </div>
             )}
 
-            <InputField
+        
+           <InputField
                 label="Email Address"
                 name="email"
                 type="email"
-                placeholder="you@example.com"
+                placeholder="johndoe@gmail.com"
                 value={formData.email}
                 onChange={handleChange}
                 error={errors.email}
@@ -59,13 +46,18 @@ export default function LoginForm({
                 icon={Lock}
             />
 
+
+            {/* Forgot Password */}
+            
             <div className="flex justify-end">
                 <button
                     type="button"
-                    onClick={onForgotPassword}
+                    onClick={() => {
+                        alert("Forgot Password Coming Soon")
+                    }}
                     className="text-xs font-semibold text-emerald-600 hover:text-emerald-700"
                 >
-                    Forgot password?
+                 Forgot password?
                 </button>
             </div>
 
@@ -82,13 +74,12 @@ export default function LoginForm({
             <div className="text-center">
                 <p className="text-sm text-slate-500">
                     Don't have an account?{" "}
-                    <button
+                    <Link to ="/register"
                         type="button"
-                        onClick={onRegister}
                         className="font-semibold text-emerald-600 hover:text-emerald-700"
                     >
                         Create an account
-                    </button>
+                    </Link>
                 </p>
             </div>
         </form>
