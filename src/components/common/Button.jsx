@@ -1,5 +1,5 @@
 import Loader from "../ui/Loader";
-import { baseStyles, variants,sizes } from '../../constants/styles';
+import { baseStyles, variants,sizes } from '../../config/styles';
 
 export default function Button({
   children,
@@ -11,6 +11,7 @@ export default function Button({
   icon: Icon,
   onClick,
   className = '',
+  classname = '',
   ...props
 }) {
 
@@ -20,7 +21,7 @@ export default function Button({
       type ={type}
       disabled={disabled || isLoading}
       onClick={onClick}
-      className={`${baseStyles} ${variants[variant]} ${sizes[size]} ${className}`}
+      className={classname ? classname :`${baseStyles} ${variants[variant]} ${sizes[size]} ${className}`}
       {...props}
     >
       {
@@ -28,7 +29,7 @@ export default function Button({
         Icon ? (<Icon className="w-4 h-4 shrink-0" />) : null
       }
 
-      <span>{children}</span>
+      {children}
 
     </button>
   );

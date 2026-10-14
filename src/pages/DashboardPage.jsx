@@ -1,4 +1,5 @@
 import {useEffect, useMemo, useState} from "react";
+import { useNavigate } from "react-router-dom";
 import DashboardHeader from "../components/dashboard/DashboardHeader";
 import SummaryCard from "../components/dashboard/SummaryCard";
 import RecentAssessment from "../components/dashboard/RecentAssessment";
@@ -22,6 +23,8 @@ export default function DashboardPage({onNavigate}) {
     const [dashboard, setDashboard]  = useState({});
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState("");
+
+    const  navigate = useNavigate();
 
     // Fetching Dash Board Data
     useEffect(() => {
@@ -58,10 +61,6 @@ export default function DashboardPage({onNavigate}) {
         <div className="min-h-screen bg-slate-50">
             
             <DashboardHeader
-                // onNavigate  = {onNavigate}
-                // households  = {households}
-                // appliances  = {appliances}
-                // assessments = {assessments}
                 isLoading   = {isLoading} 
             />
 
@@ -124,9 +123,7 @@ export default function DashboardPage({onNavigate}) {
             <section className="mb-8">
 
                 <StartAssessmentCard 
-                    // onClick={startNewAssessment}
-                    // households = {households}
-                    // appliances = {appliances}
+                    onClick={() => navigate("/assessments")}
                     isLoading  = {isLoading}
                 />
 
@@ -143,11 +140,8 @@ export default function DashboardPage({onNavigate}) {
 
 
                 <QuickActions
-                    // onNewAssessment={startNewAssessment}
-                    // onHousehold={openHouseholds}
-                    // onAppliances={openAppliances}
-                    // onAssessments={openAssessmentHistory}
-                     isLoading={isLoading}
+                     navigate  = {navigate}
+                     isLoading = {isLoading}
                 />
 
             </section>
@@ -181,14 +175,7 @@ export default function DashboardPage({onNavigate}) {
 
                     <button type="button"  className="rounded-2xl text-left ">
 
-                        <SolarSizingChart 
-                            // assessments={assessments}
-                            // completedAssessments={completedAssessments}
-                            // totalSolarCapacity={summary.totalSolarCapacity}
-                            // totalBatteryCapacity={summary.totalBatteryCapacity}
-                            // totalPeakLoad={summary.totalPeakLoad}
-                            isLoading={isLoading}
-                        />
+                        <SolarSizingChart />
 
                     </button>
 

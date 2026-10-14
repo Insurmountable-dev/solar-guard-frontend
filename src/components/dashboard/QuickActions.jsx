@@ -1,32 +1,31 @@
-import React from "react";
 import {Plus, Home, Plug, ClipboardList } from "lucide-react";
 
-export default function QuickActions({onNewAssessment, onHousehold, onAppliances, onAssessments}) {
+export default function QuickActions({navigate}) {
 
     const actions = [
         {
             label: "New Assessment",
             description: "Calculate a solar system",
             icon: Plus,
-            onClick: onNewAssessment
+            onClick:() => navigate("/assessments")
         },
         {
             label: "Household",
             description: "Manage household details",
             icon: Home,
-            onClick: onHousehold
+            onClick:() => alert("Housholds coming Soon")
         },
         {
             label: "Appliances",
             description: "Manage energy appliances",
             icon: Plug,
-            onClick: onAppliances
+            onClick:() => alert("Appliances Coming Soon")
         },
         {
             label: "Assessments",
             description: "View previous assessments",
             icon: ClipboardList,
-            onClick: onAssessments
+            onClick:() => alert("Assessments Coming Soon")
         }
     ];
 

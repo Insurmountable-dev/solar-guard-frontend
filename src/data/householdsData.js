@@ -1,0 +1,43 @@
+export const HOUSE_TYPES = [
+    { value: "stone", label: "Stone" },
+    { value: "brick", label: "Burnt Brick" },
+    { value: "concrete_block", label: "Concrete Blocks" },
+    { value: "mud", label: "Mud" },
+    { value: "mud_brick", label: "Mud Bricks" },
+    { value: "wattle_and_daub", label: "Wattle and Daub" },
+    { value: "mabati", label: "Mabati (Iron Sheets)" },
+    { value: "timber", label: "Timber / Wood" },
+    { value: "bamboo", label: "Bamboo" },
+    { value: "poles_and_mud", label: "Poles and Mud" },
+    { value: "adobe", label: "Adobe / Earth Blocks" },
+    { value: "rammed_earth", label: "Rammed Earth" },
+    { value: "concrete", label: "Cast Concrete" },
+    { value: "cement_stabilized_blocks", label: "Stabilized Soil Blocks" },
+    { value: "stone_and_mud", label: "Stone and Mud" },
+    { value: "brick_and_concrete", label: "Brick and Concrete" },
+    { value: "timber_and_mabati", label: "Timber and Mabati" },
+    { value: "stone_and_mabati", label: "Stone and Mabati" },
+    { value: "mixed", label: "Mixed Materials" },
+    { value: "other", label: "Other" },
+];
+
+
+
+export const BUILDING_TYPES = [
+    { value: "bungalow", label: "Bungalow" },
+    { value: "maisonette", label: "Maisonette" },
+    { value: "apartment", label: "Apartment / Flat" },
+    { value: "storey", label: "Storey Building" },
+    { value: "duplex", label: "Duplex" },
+    { value: "townhouse", label: "Townhouse" },
+    { value: "swahili_house", label: "Swahili House" },
+    { value: "traditional_house", label: "Traditional House / Kienyeji" },
+    { value: "manyatta", label: "Manyatta" },
+    { value: "shack", label: "Shack / Kibanda" },
+    { value: "rural_homestead", label: "Rural Homestead / Boma" },
+    { value: "mabati_house", label: "Iron-Sheet House / Nyumba ya Mabati" },
+    { value: "timber_house", label: "Timber House / Nyumba ya Mbao" },
+    { value: "semi_permanent", label: "Semi-Permanent House" },
+    { value: "permanent", label: "Permanent House" },
+    { value: "other", label: "Other" },
+];

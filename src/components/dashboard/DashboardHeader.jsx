@@ -3,11 +3,14 @@ import { Sun, LogOut, ChevronDown } from "lucide-react";
 import ConfirmDialog from "../common/ConfirmDialog";
 import { useAuth } from "../../contexts/AuthProvider";
 import { getInitials } from "../../utils/getInitials";
+import { useNavigate } from "react-router-dom";
 
 
 
 
 export default function DashboardHeader() {
+
+    const navigate = useNavigate();
 
     const {currentUser, logout } = useAuth();
     const [menuOpen, setMenuOpen] = useState(false);
@@ -69,7 +72,7 @@ export default function DashboardHeader() {
 
                 <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 sm:py-4">
 
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-3" onClick = {() => navigate("/")}>
 
                         <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-600">
                             <Sun className="h-5 w-5 text-white" />

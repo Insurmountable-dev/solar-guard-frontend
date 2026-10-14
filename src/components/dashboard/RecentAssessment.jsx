@@ -1,6 +1,6 @@
 import Metric from "./Metric";
 import { Sun } from "lucide-react";
-import { statusStyles } from "../../constants/styles";
+import { statusStyles } from "../../config/styles";
 import { SkeletonCard } from "../ui/Skeleton";
 
 

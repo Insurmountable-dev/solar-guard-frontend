@@ -1,5 +1,5 @@
 import { ShieldCheck } from "lucide-react";
-import {CONTENT, FEATURES} from "../../constants/authBrandPanel.js";
+import {CONTENT, FEATURES} from "../../config/authBrandPanel";
 
 
 

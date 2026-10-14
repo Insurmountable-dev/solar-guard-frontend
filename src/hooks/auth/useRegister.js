@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { registerUser } from "../../services/authService";
-import { validateRegisterForm } from "../../utils/validation";
+import { registerUser } from "../../services/auth/authService";
+import { validateRegisterForm } from "../../utils/auth/validation";
 
 const initialFormData = {
     first_name: "",

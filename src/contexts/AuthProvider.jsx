@@ -34,9 +34,7 @@ export function AuthProvider({ children}) {
                     } else {
 
                         setCurrentUser(null);
-
                         setAccessToken(null);
-
                         setAuthToken(null);
 
                     }
@@ -46,16 +44,12 @@ export function AuthProvider({ children}) {
                     console.error("Failed to restore authentication:",error);
 
                     sessionStorage.removeItem("solarGuardUser");
-
                     sessionStorage.removeItem("solarGuardAccessToken");
-
                     sessionStorage.removeItem("solarGuardRefreshToken");
 
 
                     setCurrentUser(null);
-
                     setAccessToken(null);
-
                     setAuthToken(null);
 
                 } finally {

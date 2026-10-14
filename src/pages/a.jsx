@@ -1,18 +1,13 @@
-import React, {useEffect,
-useState
-} from "react";
+import {useEffect,useState} from "react";
+import {useAuth} from "../contexts/AuthProvider";
 
-import {
-    useAuth
-} from "../../contexts/AuthProvider";
+import AssessmentProgress from "../components/assessment/AssessmentProgress";
 
-import AssessmentProgress from "./AssessmentProgress";
-
-import Step1Household from "../steps/Step1Household";
-import Step2RoofDetails from "../steps/Step2RoofDetails";
-import Step3Appliances from "../steps/step3Appliances";
-import Step4Review from "../steps/Step4Review";
-import Step5Results from "../steps/step5Results";
+import Step1Household from "../components/steps/Step1Household";
+import Step2RoofDetails from "../components/steps/Step2RoofDetails";
+import Step3Appliances from "../components/steps/step3Appliances";
+import Step4Review from "../components/steps/Step4Review";
+import Step5Results from "../components/steps/step5Results";
 
 import {
     saveHousehold,
@@ -24,7 +19,7 @@ import {
     getAssessmentResult,
     getAssessmentById,
     getAssessmentAppliances
-} from "../../services/assessmentService";
+} from "../services/pages/assessmentService";
 
 
 const initialHousehold = {
@@ -57,15 +52,9 @@ const initialMeasurement = {
 };
 
 
-export default function AssessmentPage({
-    onNavigate,
-    initialAssessment,
-    householdId: selectedHouseholdId
-}) {
+export default function AssessmentPage({initialAssessment,householdId: selectedHouseholdId}) {
 
-    const {
-        currentUser
-    } = useAuth();
+    const {currentUser } = useAuth();
 
 
     /*
@@ -74,15 +63,7 @@ export default function AssessmentPage({
     |--------------------------------------------------------------------------
     */
 
-    const [
-        mode,
-        setMode
-    ] = useState(
-        initialAssessment ||
-        selectedHouseholdId
-            ? "history"
-            : "new"
-    );
+    const [mode,setMode] = useState(initialAssessment ||selectedHouseholdId ? "history" : "new");
 
 
     /*
@@ -91,30 +72,16 @@ export default function AssessmentPage({
     |--------------------------------------------------------------------------
     */
 
-    const [
-        assessments,
-        setAssessments
-    ] = useState([]);
+    const [assessments,setAssessments] = useState([]);
 
 
-    const [
-        selectedAssessment,
-        setSelectedAssessment
-    ] = useState(
-        initialAssessment || null
-    );
+    const [selectedAssessment,setSelectedAssessment] = useState( initialAssessment || null);
 
 
-    const [
-        historyLoading,
-        setHistoryLoading
-    ] = useState(false);
+    const [historyLoading, setHistoryLoading] = useState(false);
 
 
-    const [
-        historyError,
-        setHistoryError
-    ] = useState("");
+    const [historyError,setHistoryError] = useState("");
 
 
     /*
@@ -123,10 +90,7 @@ export default function AssessmentPage({
     |--------------------------------------------------------------------------
     */
 
-    const assessmentStorageKey =
-        currentUser?.user_id
-            ? `solarGuardAssessmentDraft_${currentUser.user_id}`
-            : null;
+    const assessmentStorageKey = currentUser?.user_id ? `solarGuardAssessmentDraft_${currentUser.user_id}` : null;
 
 
     const getSavedDraft = () => {

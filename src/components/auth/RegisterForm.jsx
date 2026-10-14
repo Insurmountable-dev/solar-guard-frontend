@@ -1,9 +1,9 @@
 import {Link} from "react-router-dom";
 import {User, Mail, Phone, MapPin, Lock } from "lucide-react";
-import InputField from "../common/InputField";
 import Button from "../common/Button";
+import InputField from "../common/inputField";
 import PasswordRequirements from "./passwordRequirement";
-import { useRegister } from "../../hooks/useRegister";
+import { useRegister } from "../../hooks/auth/useRegister";
 
 
 export default function RegisterForm({onSuccess}) {
