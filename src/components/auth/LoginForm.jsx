@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { Mail,Lock } from "lucide-react";
 import Button from "../common/Button";
-import InputField from "../common/inputField";
+import InputField from "../common/InputField";
 import { useLogin } from "../../hooks/auth/useLogin";
 
 export default function LoginForm({ onSuccess}) {

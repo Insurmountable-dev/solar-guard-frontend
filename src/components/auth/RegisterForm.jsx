@@ -1,7 +1,7 @@
 import {Link} from "react-router-dom";
 import {User, Mail, Phone, MapPin, Lock } from "lucide-react";
 import Button from "../common/Button";
-import InputField from "../common/inputField";
+import InputField from "../common/InputField";
 import PasswordRequirements from "./passwordRequirement";
 import { useRegister } from "../../hooks/auth/useRegister";
 

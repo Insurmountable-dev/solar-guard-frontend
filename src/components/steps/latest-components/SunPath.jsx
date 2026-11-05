@@ -1,5 +1,5 @@
 import { Sun, Sunrise, Sunset, Zap } from "lucide-react";
-import SunSvg from "./sunSvg";
+import SunSvg from "./SunSvg";
 
 export default function SunPath({
      values = []
