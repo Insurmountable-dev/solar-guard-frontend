@@ -5,7 +5,6 @@ import { shorten } from "../../../../utils/charts/formatters";
 
 export default function SolarSizingBars({ data, series, minWidth }) {
 
-    console.log(minWidth);
 
     return (
 

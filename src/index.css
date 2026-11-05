@@ -1,12 +1,53 @@
 @import "tailwindcss";
 
 @layer base {
-  body {
-    @apply antialiased text-slate-800 bg-slate-50;
-  }
+    html.search-overlay-open,
+    body.search-overlay-open {
+        overflow: hidden !important;
+        height: 100%;
+    }
+
+    body {
+        @apply antialiased text-slate-800 bg-slate-50;
+
+        overflow-x: hidden;
+    }
+
+    #root {
+        min-height: 100%;
+        max-width: 100%;
+    }
+
+    /* Chrome, Edge and Safari */
+    ::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: #f1f5f9;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: #a7f3d0;
+        border: 1px solid #f1f5f9;
+        border-radius: 999px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: #059669;
+    }
 }
 
 
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+
+/* Hide scrollbars on mobile only when this utility is applied */
 @media (max-width: 767px) {
     .hide-scrollbar-mobile {
         scrollbar-width: none;
@@ -15,4 +56,12 @@
     .hide-scrollbar-mobile::-webkit-scrollbar {
         display: none;
     }
+}
+
+button {
+    cursor: pointer;
+}
+
+button:disabled {
+    cursor: not-allowed;
 }

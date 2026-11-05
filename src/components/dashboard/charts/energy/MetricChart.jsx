@@ -5,7 +5,7 @@ import ChartEmptyState from "../shared/ChartEmptyState";
 import MetricStats from "./MetricStats";
 import MetricBarChart from "./MetricBarChart";
 import AverageLegend from "./AverageLegend";
-import {getEnergyConsumptionChartData} from "../../../../services/dashBoardService";
+import {getEnergyConsumptionChartData} from "../../../../services/pages/dashBoardService";
 import { getChartMinWidth } from "../../../../utils/charts/assessmentChart";
 
 

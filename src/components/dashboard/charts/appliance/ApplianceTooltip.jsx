@@ -7,7 +7,6 @@ export default function ApplianceTooltip({ active, payload, stats }) {
 
     const item = payload[0].payload;
 
-    console.log(item);
 
     return (
 

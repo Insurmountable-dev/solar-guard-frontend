@@ -21,8 +21,6 @@ export const validateRegisterForm = (formData) => {
     return errors;
 };
 
-
-
 export const validateHouseholdForm = (formData) => {
 
     const errors = {};
@@ -99,5 +97,118 @@ export const validateHouseholdForm = (formData) => {
         isValid: Object.keys(errors).length === 0,
         errors,
         noOfErrors:Object.keys(errors).length
+    };
+};
+
+export const validateMeasurements = (formData) => {
+
+    const errors = {};
+
+    // House Length
+    if (String(formData.house_length).trim() === "") {
+        errors.house_length = "Please Insert House Length";
+    } else if (Number(formData.house_length) <= 0) {
+        errors.house_length = "House Length Must Be Greater Than Zero";
+    } else if (!Number.isFinite(Number(formData.house_length))) {
+        errors.house_length = "Please Enter a Valid House Length";
+    }
+
+    // House Width
+    if (String(formData.house_width).trim() === "") {
+        errors.house_width = "Please Insert House Width";
+    } else if (!Number.isFinite(Number(formData.house_width))) {
+        errors.house_width = "Please Enter a Valid House Width";
+    } else if (Number(formData.house_width) <= 0) {
+        errors.house_width = "House Width Must Be Greater Than Zero";
+    }
+
+    // Roof Length
+    if (String(formData.roof_length).trim() === "") {
+        errors.roof_length = "Please Insert Roof Length";
+    } else if (!Number.isFinite(Number(formData.roof_length))) {
+        errors.roof_length = "Please Enter a Valid Roof Length";
+    } else if (Number(formData.roof_length) <= 0) {
+        errors.roof_length = "Roof Length Must Be Greater Than Zero";
+    }
+
+    // Roof Width
+    if (String(formData.roof_width).trim() === "") {
+        errors.roof_width = "Please Insert Roof Width";
+    } else if (!Number.isFinite(Number(formData.roof_width))) {
+        errors.roof_width = "Please Enter a Valid Roof Width";
+    } else if (Number(formData.roof_width) <= 0) {
+        errors.roof_width = "Roof Width Must Be Greater Than Zero";
+    }
+
+    // Roof Type
+    if (String(formData.roof_type).trim() === "") {
+        errors.roof_type = "Please Select Roof Type";
+    }
+
+    // Roof Material
+    if (String(formData.roof_material).trim() === "") {
+        errors.roof_material = "Please Select Roof Material";
+    }
+
+    // Roof Orientation
+    if (String(formData.roof_orientation).trim() === "") {
+        errors.roof_orientation = "Please Select Roof Orientation";
+    }
+
+    // Shading Level
+    if (String(formData.shading_level).trim() === "") {
+        errors.shading_level = "Please Select Shading Level";
+    }
+
+    // Measurement Method
+    if (String(formData.measurement_method).trim() === "") {
+        errors.measurement_method = "Please Select Measurement Method";
+    }
+
+    return {
+        errors,
+        isValid:Object.keys(errors).length === 0,
+        noOfErrors:Object.keys(errors).length
+
+    };
+};
+
+
+export const validateAppliancesForm = (formData) => {
+
+    const errors = {};
+
+    if (!formData.appliance_name.trim()) {
+        errors.appliance_name = "Appliance name is required";
+    };
+
+    if (!formData.appliance_category) {
+        errors.appliance_category = "Appliance category is required";
+    }
+
+    if (!formData.quantity || Number(formData.quantity) < 1) {
+        errors.quantity = "Quantity must be at least 1";
+    }
+
+    if (!formData.power_rating_watts || Number(formData.power_rating_watts) <= 0) {
+        errors.power_rating_watts = "Power rating must be greater than 0";
+    }
+
+    if (formData.hours_per_day === "" || Number(formData.hours_per_day) <= 0 ) {
+        errors.hours_per_day = "Hours per day must be greater than 0";
+    }else if(Number(formData.hours_per_day) > 24 ){
+            errors.hours_per_day = "A day has only 24 hours Invalid"
+    }
+
+    if ( formData.days_per_week === "" || Number(formData.days_per_week) < 1 || Number(formData.days_per_week) > 7) {
+        errors.days_per_week = "Days per week must be between 1 and 7";
+    };
+
+   
+
+    return {
+        isValid: Object.keys(errors).length === 0,
+        noOfErrors:Object.keys(errors).length,
+        errors,
     };
 };

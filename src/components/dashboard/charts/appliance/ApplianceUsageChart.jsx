@@ -7,7 +7,7 @@ import ChartEmptyState from "../shared/ChartEmptyState";
 import ApplianceStats from "./ApplianceStats";
 import ApplianceBars from "./ApplianceBars";
 
-import { getApplianceUsageChartData } from "../../../../services/dashBoardService";
+import { getApplianceUsageChartData } from "../../../../services/pages/dashBoardService";
 
 
 
@@ -30,7 +30,6 @@ export default function ApplianceUsageChart() {
                 const response = await getApplianceUsageChartData(page);
                 setData(response);
 
-                console.log(response);
 
             }catch(error){
 

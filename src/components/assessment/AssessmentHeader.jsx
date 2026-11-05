@@ -1,69 +1,77 @@
+
 import { Home, Sun, Clock, Save } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import   Button from "../common/Button";
 
 export default function AssessmentHeader({
     title = "Let's size your solar system",
     subtitle = "Answer a few quick questions about your home and the way you use power. We'll recommend the system that fits.",
     estimatedTime = "About 5 minutes",
 }) {
-
     const navigate = useNavigate();
 
+
     return (
+        <header className="relative isolate w-full overflow-hidden bg-emerald-950 text-white">
 
-        
-        <header className="relative isolate w-full max-w-full overflow-hidden bg-gradient-to-br from-emerald-900 via-emerald-800 to-teal-700">
+            <div
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-0 overflow-hidden"
+            >
+                <div className="absolute -right-16 -top-20 h-64 w-64 rounded-full border border-emerald-700/60 sm:h-80 sm:w-80" />
 
-            {/* Decorative layer: its own clipping box so nothing can widen the page */}
-            <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
+                <div className="absolute -right-8 -top-12 h-48 w-48 rounded-full border border-emerald-700/40 sm:h-64 sm:w-64" />
 
-                {/* Sun glow, decorative */}
-                <div className="absolute -right-20 -top-24 h-72 w-72 rounded-full bg-amber-300/30 blur-3xl" />
-                <div className="absolute -right-10 -top-12 h-52 w-52 rounded-full border border-amber-200/20" />
-                <div className="absolute -right-2 top-0 h-36 w-36 rounded-full border border-amber-200/30" />
-                <Sun
-                    className="absolute right-6 top-6 h-20 w-20 text-amber-300 sm:right-16 sm:top-8 sm:h-28 sm:w-28"
-                    strokeWidth={1.25}
-                />
-
+                <div className="absolute right-6 top-8 flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-800/80 text-amber-300 sm:right-12 sm:top-10 sm:h-20 sm:w-20">
+                    <Sun
+                        className="h-8 w-8 sm:h-11 sm:w-11"
+                        strokeWidth={1.5}
+                    />
+                </div>
             </div>
 
-            {/* Extra bottom padding leaves room for the progress card to overlap */}
-            <div className="relative mx-auto max-w-6xl px-4 pb-20 pt-4 sm:px-6 sm:pb-24 sm:pt-6">
+            <div className="relative mx-auto w-full max-w-[1440px] px-4 pb-7 pt-4 sm:px-7 sm:pb-9 sm:pt-6 lg:px-8 lg:pb-10">
+
 
                 <button
                     type="button"
-                    onClick={() => navigate("/")}
+                    onClick={() => navigate("/", { replace: false })}
                     aria-label="Back to homepage"
-                    className="group inline-flex h-11 items-center gap-2.5 rounded-full bg-white/10 py-1 pl-1 pr-4 text-sm font-semibold text-white shadow-lg shadow-emerald-950/20 ring-1 ring-inset ring-white/25 backdrop-blur-md transition duration-200 hover:bg-white/20 hover:ring-white/40 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-300 active:scale-95 motion-reduce:transition-none sm:h-12 sm:gap-3 sm:pr-5"
+                    className="group inline-flex min-h-11 items-center gap-3 rounded-xl border border-white/25 bg-white/10 py-1 pl-1.5 pr-4 text-sm font-semibold text-white shadow-sm transition-colors duration-200 hover:border-amber-300/70 hover:bg-white/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-300 focus-visible:ring-offset-2 focus-visible:ring-offset-emerald-950 active:bg-white/30 sm:pr-5"
                 >
-                    <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white text-emerald-700 shadow-sm transition duration-200 group-hover:-translate-x-0.5 group-hover:bg-amber-300 group-hover:text-emerald-900 motion-reduce:transition-none sm:h-10 sm:w-10">
-                    <Home className="h-4 w-4 sm:h-5 sm:w-5" />
+                    <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-white text-emerald-800 transition-colors duration-200 group-hover:bg-amber-300 group-hover:text-emerald-950 sm:h-10 sm:w-10">
+                        <Home className="h-4 w-4 sm:h-5 sm:w-5" />
                     </span>
 
-                    <span className="sm:hidden">Home</span>
-                    <span className="hidden sm:inline">Back to home</span>
-                    
+                    <span>Back to home</span>
                 </button>
 
-                <div className="mt-8 min-w-0 max-w-2xl sm:mt-10">
 
-                    <h1 className="break-words text-3xl font-bold leading-tight tracking-tight text-white sm:text-4xl">{title}</h1>
+                <div className="mt-7 max-w-2xl sm:mt-9">
 
-                    <p className="mt-3 text-base leading-relaxed text-emerald-50/80">{subtitle}</p>
+                    <div className="mb-3 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-emerald-300">
+                        <span className="h-1.5 w-1.5 rounded-full bg-amber-300" />
+                        Solar Guard
+                    </div>
 
-                    <div className="mt-6 flex flex-wrap items-center gap-2">
+                    <h1 className="max-w-xl break-words text-3xl font-bold leading-tight tracking-tight sm:text-4xl lg:text-5xl">
+                        {title}
+                    </h1>
 
-                        <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1.5 text-xs font-medium text-white ring-1 ring-white/20">
-                            <Clock className="h-3.5 w-3.5 text-amber-300" />
-                            {estimatedTime}
-                        </span>
+                    <p className="mt-3 max-w-xl text-sm leading-6 text-emerald-100/85 sm:mt-4 sm:text-base sm:leading-7">
+                        {subtitle}
+                    </p>
 
-                        <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1.5 text-xs font-medium text-white ring-1 ring-white/20">
-                            <Save className="h-3.5 w-3.5 text-amber-300" />
-                            Save and finish later
-                        </span>
+                    <div className="mt-5 flex flex-wrap gap-2 sm:mt-6">
+
+                        <div className="inline-flex min-h-9 items-center gap-2 rounded-lg border border-white/15 bg-white/10 px-3 py-2 text-xs font-medium text-emerald-50 sm:text-sm">
+                            <Clock className="h-4 w-4 shrink-0 text-amber-300" />
+                            <span>{estimatedTime}</span>
+                        </div>
+
+                        <div className="inline-flex min-h-9 items-center gap-2 rounded-lg border border-white/15 bg-white/10 px-3 py-2 text-xs font-medium text-emerald-50 sm:text-sm">
+                            <Save className="h-4 w-4 shrink-0 text-amber-300" />
+                            <span>Save and finish later</span>
+                        </div>
 
                     </div>
 
@@ -72,7 +80,5 @@ export default function AssessmentHeader({
             </div>
 
         </header>
-
     );
-
 }

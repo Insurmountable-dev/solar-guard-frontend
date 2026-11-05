@@ -12,8 +12,6 @@ export default function RegisterPage() {
 
     const handleRegisterSuccess = (authData) => {
 
-        console.log("Registration successful:", authData);
-
         navigate("/login");
 
     };

@@ -90,13 +90,6 @@ apiClient.interceptors.response.use((response )=> {
 
         const originalRequest = error.config;
 
-        // console.log(error);
-        // console.log(originalRequest);
-        // console.log(originalRequest?._retry);
-        // console.log("error.response:",error.response);
-        // console.log("Url",originalRequest.url);
-
-
         // If Its a 401 Erro the code continues running
         if (error.response?.status !== 401) {
             return Promise.reject(error);

@@ -1,9 +1,19 @@
 import apiClient from "../../api/apiClient";
 
 
-export const addHousehold = async ({householdData}) => {
-  
-    const response = await apiClient.post("/households", householdData);
+export const createAssessment = async() => {
 
-    return response;
+    const response = await apiClient.post("/work-flow");
+
+    return response.data;
+
+};
+
+
+export const fetchSolarAssessments = async () => {
+
+    const response = await apiClient("/solar-assessments");
+
+    return response.data;
+    
 };

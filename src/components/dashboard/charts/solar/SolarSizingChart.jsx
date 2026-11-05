@@ -1,5 +1,5 @@
 import {useState, useEffect} from "react";
-import { getSolarSizingChartData } from "../../../../services/dashBoardService";
+import { getSolarSizingChartData } from "../../../../services/pages/dashBoardService";
 
 import { Sun } from "lucide-react";
 import ChartContainer from "../shared/ChartContainer";
@@ -28,7 +28,6 @@ export default function SolarSizingChart() {
 
                 setData(response.data);
 
-                console.log(response);
 
               }catch(error){
 

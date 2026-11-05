@@ -2,7 +2,6 @@
 
 export default function MetricStats({ metric, average, highest }) {
 
- console.log(highest);
     return (
 
         <div className="mb-5 grid grid-cols-2 gap-3">

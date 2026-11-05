@@ -6,7 +6,6 @@ import { shorten } from "../../../../utils/charts/formatters";
 
 export default function MetricBarChart({data,metric,average,minWidth,showAverage = false}) {
 
-    console.log(data);
 
     // Unique per metric so two charts on one page never share a gradient
     const gradientId = `gradient-${metric.id}`;

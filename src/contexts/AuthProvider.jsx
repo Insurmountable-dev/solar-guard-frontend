@@ -98,7 +98,6 @@ export function AuthProvider({ children}) {
         sessionStorage.setItem("solarGuardAccessToken",newAccessToken);
         sessionStorage.setItem("solarGuardRefreshToken",newRefreshToken);
 
-        // console.log(authData);
 
     };
 

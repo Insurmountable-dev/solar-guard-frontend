@@ -3,7 +3,6 @@ import { formatNumber } from "../../../../utils/charts/formatters";
 
 export default function ApplianceStats({stats}) {
 
-    console.log(stats);
 
     return (
 

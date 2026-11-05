@@ -1,47 +1,63 @@
-import {Plus, Home, Plug, ClipboardList } from "lucide-react";
+import { Plus, Home, Plug, ClipboardList } from "lucide-react";
+import useNavigation from "../../contexts/NavigationProvider";
+import { assessmentMessages, assessmentResultsMessages, householdMessages } from "../../constants/messages";
 
-export default function QuickActions({navigate}) {
+export default function QuickActions({ navigate, path }) {
+
+    const {setLoadingMessages, setShowLoaderApp, setPathname } = useNavigation();
+  
 
     const actions = [
         {
             label: "New Assessment",
             description: "Calculate a solar system",
             icon: Plus,
-            onClick:() => navigate("/assessments")
+            onClick: () => {
+                setPathname(path);
+                setLoadingMessages(assessmentMessages);
+                setShowLoaderApp(true);
+            },
         },
         {
             label: "Household",
             description: "Manage household details",
             icon: Home,
-            onClick:() => alert("Housholds coming Soon")
-        },
-        {
-            label: "Appliances",
-            description: "Manage energy appliances",
-            icon: Plug,
-            onClick:() => alert("Appliances Coming Soon")
+            onClick: () => {
+                setPathname("/households");
+                setLoadingMessages(householdMessages);
+                setShowLoaderApp(true);
+            },
         },
         {
             label: "Assessments",
             description: "View previous assessments",
             icon: ClipboardList,
-            onClick:() => alert("Assessments Coming Soon")
-        }
+            onClick: () => {
+                setPathname("/view-assessments");
+                setLoadingMessages(assessmentResultsMessages);
+                setShowLoaderApp(true);
+            },
+        },
     ];
 
-    return (
+   
 
+    return (
         <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
 
             <div className="mb-5">
-                <h2 className="text-lg font-semibold text-slate-900">Quick Actions</h2>
-                <p className="mt-1 text-sm text-slate-500">Quickly access Solar Guard features.</p>
+                <h2 className="text-lg font-semibold text-slate-900">
+                    Quick Actions
+                </h2>
+
+                <p className="mt-1 text-sm text-slate-500">
+                    Quickly access Solar Guard features.
+                </p>
             </div>
 
             <div className="space-y-3">
 
                 {actions.map((action) => {
-
                     const Icon = action.icon;
 
                     return (
@@ -56,18 +72,20 @@ export default function QuickActions({navigate}) {
                             </div>
 
                             <div>
-                                <p className="text-sm font-semibold text-slate-800">{action.label} </p>
-                                <p className="mt-0.5 text-xs text-slate-500">{action.description}</p>
+                                <p className="text-sm font-semibold text-slate-800">
+                                    {action.label}
+                                </p>
 
+                                <p className="mt-0.5 text-xs text-slate-500">
+                                    {action.description}
+                                </p>
                             </div>
                         </button>
                     );
-
                 })}
-                
+
             </div>
 
         </div>
-
     );
 }
