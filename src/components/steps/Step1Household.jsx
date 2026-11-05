@@ -1,5 +1,5 @@
 import { Home, Tag, Hammer, Building2, Layers, DoorOpen, Users, Map, MapPin, Compass, Zap, Sun,} from "lucide-react";
-import InputField from "../common/InputField";
+import InputField from "../common/InputField.jsx";
 import StepsHeader from "./steps-components/StepsHeader";
 import ToggleCard from "./steps-components/ToggleCard";
 import SectionCard from "./steps-components/SectionCard";

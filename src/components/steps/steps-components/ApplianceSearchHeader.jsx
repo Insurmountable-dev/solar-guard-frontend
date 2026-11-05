@@ -1,6 +1,6 @@
 import { Search, X, ChevronLeft } from 'lucide-react';
 import Button from '../../common/Button';
-import InputField from '../../common/InputField';
+import InputField from '../../common/InputField.jsx';
 import useNavigation from '../../../contexts/NavigationProvider';
 
 

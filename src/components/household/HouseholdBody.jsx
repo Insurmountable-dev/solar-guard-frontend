@@ -2,7 +2,7 @@ import {House,Users} from "lucide-react";
 
 import Pagination from "../common/Pagination";
 import SummaryCard from "../dashboard/SummaryCard";
-import HouseholdCard from "./HouseholdCard";
+import HouseholdCard from "./HouseholdCard.jsx";
 import useNavigation from "../../contexts/NavigationProvider";
 import { householdMessages } from "../../constants/messages";
 

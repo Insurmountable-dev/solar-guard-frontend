@@ -1,6 +1,6 @@
 import { Ruler, Home, Layers, Mountain, Compass, Sun } from "lucide-react";
 
-import InputField from "../common/InputField";
+import InputField from "../common/InputField.jsx";
 import StepsHeader from "./steps-components/StepsHeader";
 import SectionCard from "./steps-components/SectionCard";
 import FieldError from "./steps-components/FieldError";
