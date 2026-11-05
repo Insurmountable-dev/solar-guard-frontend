@@ -1,4 +1,4 @@
-import {House,Users,ClipboardCheck} from "lucide-react";
+import {House,Users} from "lucide-react";
 
 import Pagination from "../common/Pagination";
 import SummaryCard from "../dashboard/SummaryCard";
